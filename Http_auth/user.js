@@ -8,17 +8,17 @@ let userSchema = new mongoose.Schema({
         min: 3, max: 30
     },
     email: {
-        type: email,
+        type: String,
         required: true,
         unique: true
     },
     password: {
-        type: password,
+        type: String,
         required: true,
         min: 6, max: 16
     }
-})
+});
 
-const userModel = mongoose.model("User", userSchema)
+const userModel = mongoose.model('User', userSchema)
 
 export default userModel;
