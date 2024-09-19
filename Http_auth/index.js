@@ -4,8 +4,11 @@ dotenv.config({path: './.env'})
 import userModel from './user.js'
 import mongoose from 'mongoose'
 import bcrypt from 'bcrypt'
+import jwt from 'jsonwebtoken'
 
+// console.log(process.env.JWT_SECRET);
 
+const JWT_SECRET = "aajbfaj"
 
 mongoose.connect(`mongodb+srv://aniketkainth98107:zKcbtlNqEzF9OEYM@cluster0.hwudb.mongodb.net/Users`)
 const app = express();
@@ -39,12 +42,17 @@ app.post("/signup", async (req, res) =>  {
             password: hashedPassword,
             name,
         });
+
+        const token = jwt.sign({id: user._id}, process.env.JWT_SECRET)
+        console.log(token);
+        
         res.json({
-            message: "Congratulation, You are signed up",user
+            message: "Congratulation, You are signed up",user,token
         })
         
     } catch (error) {
-        
+        console.error(error); // Log the error for debugging
+        res.status(500).json({ Error: true, message: "Internal server error" });
     }
 })
 
