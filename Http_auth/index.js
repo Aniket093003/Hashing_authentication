@@ -14,13 +14,24 @@ app.use(express.json());
 app.post("/signup", async (req, res) =>  {
     const {name, email, password} = req.body;
 
-    if(!email || !password || !name){
+     if(!email || !password || !name){
         return res.status(411).json({
             Error: true,
             message: "All feilds {email, password, name} required"  
         })
     }
-    try {
+    try { 
+
+        const existingUser = await userModel.findOne({
+            email,
+        })
+        if (existingUser){
+            return res.json({
+                message: "you are already signed up"
+            })
+        }
+        
+
         const hashedPassword = await bcrypt.hash(password, 5);
 
         const user = await userModel.create({
